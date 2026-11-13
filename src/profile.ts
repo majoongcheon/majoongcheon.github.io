@@ -94,7 +94,7 @@ export const profile: Profile = {
       period: '2026.07.22 – 현재',
       highlights: [
         '고용노동부 지원(교육비 전액 지원)으로 진행하는 과정',
-        'Docker · Docker Compose 로 여러 서비스를 컨테이너로 묶어 배포하는 팀 프로젝트 수행',
+        '미니프로젝트: ML 모델 구현(3팀 팀장) · DL 모델 서빙(3조) · 컨테이너 환경 구축(2조 팀장)을 수행하고, 지금은 ML 시스템 클라우드 배포를 배우는 중',
         '배포 전 이전 이미지 ID 와 되돌리기 태그를 남기고, 백업 · 복원은 임시 환경에서 먼저 시험',
         '장애마다 증상 · 근거 · 영향 · 조치를 네 줄로 기록하고, 배운 내용을 테크노트로 블로그에 정리',
       ],
@@ -202,10 +202,28 @@ export const profile: Profile = {
   // 연구 성과 위주로 정리했다. 링크가 없는 항목은 url 을 생략한다.
   projects: [
     {
-      name: 'Klassic: 컨테이너 기반 국악보 변환 서비스',
+      name: 'Klassic 재구성: 국악보 변환 · 편집 API 컨테이너 환경',
+      affiliation: 'ABC 부트캠프 미니프로젝트4 · 컨테이너 기반 환경 구축 과정 · 2조 · 2026.10–11',
       description:
-        '부트캠프 미니 프로젝트(2조)입니다. 정간보 이미지를 인식해 편집하고 여러 형식으로 내려받는 서비스를 웹 · 관리자 · 인식 엔진 · DB 컨테이너로 나누어 구성했고, 발표를 맡았습니다. 배포할 때마다 되돌릴 이미지를 남기고, 시계 오차로 인식이 실패한 문제는 원인을 호스트 시계까지 좇아 찾았습니다.',
-      tags: ['Docker', 'Nginx', 'MariaDB', '팀 프로젝트'],
+        '3조가 만든 1차 서비스를 Docker Compose 로 구동하는 기준판(v0.1.1)을 이슈 단위로 새로 구성한 프로젝트입니다. 웹 화면 · 백엔드 · 인식 엔진(model-api) · DB 를 컨테이너로 나누고, 입구(Nginx) 하나로 화면과 API 를 나눴으며 관리자 화면과 DB 는 외부에 열지 않았습니다. 팀장으로 백엔드 · 공통 · 배포를 맡아 발표했습니다. 배포할 때마다 되돌릴 이미지를 남겼고, 시계 오차로 인식이 실패한 문제는 호스트 시계까지 좇아 원인을 찾았습니다. 구현에는 Claude Code 를 활용했습니다.',
+      url: 'https://github.com/K-lassic/Klassic',
+      tags: ['Docker Compose', 'Nginx', 'MariaDB', 'Tailscale Funnel', '팀장'],
+    },
+    {
+      name: 'Klassic 1차: 국악보 변환 및 가상악기 연주 서빙 플랫폼',
+      affiliation: 'ABC 부트캠프 미니프로젝트3 · DL 모델 서빙 과정 · 3조 「풍악을 울려라」',
+      description:
+        '오선보와 정간보 사진 · PDF 를 인식해 악보 데이터로 바꾸고, 편집한 악보를 국악기 소리로 연주해 내려받게 하는 서비스의 1차 판입니다. 웹 화면 · 웹 서비스 · 공유 모듈은 Node.js 로, 모델 API 는 Python(uv)으로 나누고 MariaDB 와 pm2 로 구동했습니다. 실행 조건(운영체제 · 도구 · 인식 엔진과 FluidSynth 설치 절차)은 직접 정리했습니다.',
+      url: 'https://github.com/majoongcheon/project2610',
+      tags: ['Node.js', 'Python', 'MariaDB', 'FluidSynth', 'pm2', '모델 서빙'],
+    },
+    {
+      name: '곁, 돌봄의 무게를 읽다: 돌봄부담 7문항 진단',
+      affiliation: 'ABC 부트캠프 미니프로젝트2 · ML 모델 구현 과정 · 3팀 · 2026.08–09',
+      description:
+        '발달장애인 보호자의 돌봄부담을 7문항으로 가늠하고, 부담이 크면 가까운 복지서비스 신청 접수처를 지도로 안내하는 서비스입니다. 팀장으로 계획서를 쓰고 설계 · 배포를 이끌었습니다. 2024 실태조사(3,000가구)의 38개 변수에서 후진 제거로 7문항을 골랐고, 시험 602건에서 고부담 여부 재현율 77.3%, 실제 고부담을 부담 없음으로 판정한 경우는 0건이었습니다. 5구간 정확도는 47.8%라는 한계도 문서에 밝혔고, 로그인이나 개인정보 수집은 없습니다. 구현에는 Claude Code 를 활용했습니다.',
+      url: 'https://github.com/majoongcheon/project2608',
+      tags: ['Python', 'scikit-learn', 'LightGBM', 'SHAP', 'Vue', 'Express', 'MariaDB', '팀장'],
     },
     {
       name: '유기 반도체 결정의 광신호 전달 연구',
@@ -229,7 +247,8 @@ export const profile: Profile = {
     },
     {
       name: 'my-profile',
-      description: '지금 보고 있는 한 페이지짜리 자기소개 페이지.',
+      description: '지금 보고 있는 한 페이지짜리 자기소개 페이지. GitHub Pages 로 배포하고 있습니다.',
+      url: 'https://github.com/majoongcheon/majoongcheon.github.io',
       tags: ['React', 'TypeScript'],
     },
   ],
