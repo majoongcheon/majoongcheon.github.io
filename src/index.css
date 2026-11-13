@@ -1,27 +1,75 @@
-/* 전체 스타일. 라이브러리 없이 CSS 만 쓰고, 모바일 우선으로 작성한다. */
+/* 전체 스타일: 스타벅스 홈페이지 느낌의 레이아웃 (getdesign 의 starbucks DESIGN.md 참고).
+   화면 폭을 꽉 채우는 색 띠가 번갈아 이어지고(크림 → 흰색 → 짙은 초록 → 크림 → 짙은 초록),
+   넓은 화면에서는 구역 제목이 왼쪽, 내용이 오른쪽에 놓인다. 버튼은 알약 모양이다.
+   라이브러리 없이 CSS 만 쓰고, 모바일 우선으로 작성한다.
+   색 · 글꼴 · 모서리 · 그림자 · 폭은 모두 :root 의 CSS 변수에서 바꾼다. */
 :root {
-  --text: #4b4656;
-  --text-h: #08060d;
-  --bg: #fff;
-  --surface: #f7f6fa;
-  --border: #e5e4e7;
-  --accent: #7c3aed;
+  /* 초록 4단계: 역할이 다르다 (제목 · 버튼 · 짙은 띠 · 장식) */
+  --green-starbucks: #006241; /* 제목 */
+  --green-accent: #00754a; /* 버튼 · 링크 */
+  --green-house: #1e3932; /* 짙은 띠 */
+  --green-uplift: #2b5148; /* 장식 */
+  --green-light: #d4e9e2; /* 연한 초록 면(태그 · 장식 원) */
 
-  font: 16px/1.7 system-ui, 'Segoe UI', 'Malgun Gothic', Roboto, sans-serif;
+  /* 띠 색: 위에서 아래로 이어지는 순서는 아래 "색 띠" 규칙에서 정한다 */
+  --band-cream: #f2f0eb; /* Neutral Warm */
+  --band-white: #fff;
+  --band-dark: var(--green-house);
+  --surface: #fff; /* 카드 */
+  --border: #e7e7e7; /* 가는 구분선 */
+
+  /* 글자색: 순수 검정 대신 87% · 58% 검정 */
+  --text-h: rgb(0 0 0 / 0.87);
+  --text: rgb(0 0 0 / 0.58);
+
+  /* 역할 이름 (아래 규칙은 이 이름만 쓴다) */
+  --heading: var(--green-starbucks);
+  --accent: var(--green-accent);
+  --accent-hover: var(--green-starbucks);
+  --on-accent: #fff;
+  --tag-bg: var(--green-light);
+  --tag-text: var(--green-house);
+
+  /* 글꼴: SoDoSans 는 전용 서체라 없으면 Helvetica 계열로 대체된다 */
+  --font-body: SoDoSans, 'Helvetica Neue', Helvetica, Arial, 'Malgun Gothic', sans-serif;
+  --font-head: var(--font-body);
+  --tracking: -0.01em;
+
+  /* 폭 · 모서리 · 그림자 · 움직임 */
+  --content-width: 64rem; /* 본문 최대 폭 */
+  --gutter: max(1rem, calc((100% - var(--content-width)) / 2)); /* 띠 안쪽 좌우 여백 */
+  --radius-card: 12px;
+  --radius-pill: 50px;
+  --shadow-card: 0 0 0.5px rgb(0 0 0 / 0.14), 0 1px 1px rgb(0 0 0 / 0.24);
+  --shadow-lift: 0 0 6px rgb(0 0 0 / 0.24), 0 8px 12px rgb(0 0 0 / 0.14);
+  --press-scale: 0.95;
+  --transition: 0.2s ease;
+
+  font: 16px/1.5 var(--font-body);
+  letter-spacing: var(--tracking);
   color: var(--text);
-  background: var(--bg);
+  background: var(--band-cream);
   color-scheme: light dark;
   -webkit-font-smoothing: antialiased;
 }
 
+/* 다크 모드: 참고 문서에 없는 부분이라 짙은 초록 계열로 직접 정했다 */
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --surface: #1f2028;
-    --border: #2e303a;
-    --accent: #c084fc;
+    --band-cream: #121a17;
+    --band-white: #1a2420;
+    --band-dark: #0b1411;
+    --surface: #24332e;
+    --border: #2f3f39;
+    --text-h: rgb(255 255 255 / 0.92);
+    --text: rgb(255 255 255 / 0.65);
+    --heading: #6fd1ac;
+    --accent: #4fc79a;
+    --accent-hover: #86dcbb;
+    --on-accent: #0b1411;
+    --tag-bg: var(--green-uplift);
+    --tag-text: #fff;
+    --shadow-card: 0 0 0.5px rgb(255 255 255 / 0.2), 0 1px 1px rgb(0 0 0 / 0.5);
   }
 }
 
@@ -35,28 +83,41 @@ body {
 
 a {
   color: var(--accent);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--accent-hover);
 }
 
 h1,
 h2,
 h3 {
   color: var(--text-h);
-  line-height: 1.25;
+  font-family: var(--font-head);
+  line-height: 1.2;
 }
 
 h1 {
   margin: 0;
-  font-size: clamp(2rem, 8vw, 3.25rem);
+  color: var(--heading);
+  font-size: clamp(2.4rem, 8vw, 4.5rem);
+  font-weight: 600;
 }
 
+/* 제목의 위계는 크기가 아니라 굵기 · 색으로 나눈다 */
 h2 {
-  margin: 0 0 0.75rem;
-  font-size: 1.35rem;
+  margin: 0 0 1rem;
+  color: var(--heading);
+  font-size: 1.75rem;
+  font-weight: 600;
 }
 
 h3 {
   margin: 0 0 0.25rem;
   font-size: 1.1rem;
+  font-weight: 600;
 }
 
 p {
@@ -69,27 +130,83 @@ ul {
   list-style: none;
 }
 
+/* 페이지 전체는 폭 제한 없이 띠가 화면을 채운다. 글자 폭은 각 띠의 좌우 여백(--gutter)이 맞춘다 */
 .page {
-  max-width: 42rem;
-  margin: 0 auto;
-  padding: 0 1rem 4rem;
+  padding: 0;
 }
 
+.hero,
 .page > section {
-  padding: 1.5rem 0;
-  border-top: 1px solid var(--border);
+  padding-inline: var(--gutter);
 }
 
+/* 소개(맨 위): 크림색 바탕에 큰 제목. 오른쪽에는 장식 원이 놓인다 */
 .hero {
-  padding: 3.5rem 0 2rem;
+  position: relative;
+  overflow: hidden;
+  padding-block: 4.5rem 4rem;
+  background: var(--band-cream);
+}
+
+.hero > * {
+  position: relative; /* 장식 원 위에 글자가 오게 한다 */
+  z-index: 1;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -7rem;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 50%;
+  background: var(--green-light);
+  transform: translateY(-50%);
 }
 
 .tagline {
-  margin: 0.5rem 0 0;
-  font-size: 1.15rem;
+  max-width: 32rem;
+  margin: 1rem 0 0;
+  font-size: 1.2rem;
+  line-height: 1.75;
 }
 
-/* 기술 스택 · 프로젝트 태그 */
+/* 색 띠: 소개(크림) → 소개글(흰색) → 기술 스택(짙은 초록) → 프로젝트(크림) → 연락처(짙은 초록, 푸터) */
+.page > section {
+  padding-block: 3rem;
+}
+
+.page > section:nth-of-type(1) {
+  background: var(--band-white);
+}
+
+.page > section:nth-of-type(3) {
+  background: var(--band-cream);
+}
+
+/* 짙은 초록 띠: 글자 · 링크 · 태그 색을 이 띠 안에서만 뒤집는다 */
+.page > section:nth-of-type(2),
+.page > section:nth-of-type(4) {
+  --heading: #fff;
+  --text-h: #fff;
+  --text: rgb(255 255 255 / 0.7);
+  --accent: #fff;
+  --accent-hover: var(--green-light);
+  --on-accent: var(--green-house);
+  --tag-bg: rgb(255 255 255 / 0.14);
+  --tag-text: #fff;
+
+  background: var(--band-dark);
+}
+
+/* 구역: 좁은 화면은 위아래로, 넓은 화면은 제목(왼쪽) · 내용(오른쪽) 두 칸 */
+.page > section > p,
+.page > section > ul {
+  max-width: 44rem;
+}
+
+/* 기술 스택 · 프로젝트 태그: 알약 */
 .chips {
   display: flex;
   flex-wrap: wrap;
@@ -97,17 +214,17 @@ ul {
 }
 
 .chips li {
-  padding: 0.2rem 0.75rem;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--text-h);
-  font-size: 0.9rem;
+  padding: 0.25rem 1rem;
+  border-radius: var(--radius-pill);
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
 .chips.small li {
   font-size: 0.8rem;
-  padding: 0.05rem 0.6rem;
+  padding: 0.05rem 0.7rem;
 }
 
 /* 프로젝트 카드: 모바일은 한 줄, 넓은 화면은 두 칸 */
@@ -117,10 +234,15 @@ ul {
 }
 
 .card {
-  padding: 1rem;
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-card);
   background: var(--surface);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--transition);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lift);
 }
 
 /* 펼침 카드: 이름 줄 전체가 눌리는 영역이다 */
@@ -140,10 +262,28 @@ ul {
   display: none;
 }
 
+/* 초록 원형 버튼(Frap 처럼 Green Accent 채움). 누르면 0.95 배로 눌린다 */
 .card summary::after {
   content: '+';
-  color: var(--accent);
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
   font-size: 1.25rem;
+  line-height: 1;
+  transition: transform var(--transition), background var(--transition);
+}
+
+.card summary:hover::after {
+  background: var(--accent-hover);
+}
+
+.card summary:active::after {
+  transform: scale(var(--press-scale));
 }
 
 .card[open] summary::after {
@@ -151,29 +291,106 @@ ul {
 }
 
 .card-body {
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
 }
 
 .card-body p {
   margin-bottom: 0.5rem;
 }
 
+/* 알약 버튼: 카드의 "자세히 보기" 와 연락처 링크 */
+.card-link a,
+.links a {
+  display: inline-block;
+  padding: 0.45rem 1.25rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-pill);
+  color: var(--accent);
+  text-decoration: none;
+  transition: transform var(--transition), background var(--transition), color var(--transition);
+}
+
+.card-link a:hover,
+.links a:hover {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.card-link a:active,
+.links a:active {
+  transform: scale(var(--press-scale));
+}
+
 .card-link {
-  margin: 0.5rem 0 0;
+  margin: 0.75rem 0 0;
 }
 
 .links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
+  gap: 0.75rem;
+}
+
+/* 연락처의 첫 링크(GitHub)는 채운 알약으로 눈에 띄게 한다 */
+.links a:first-child {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.links a:first-child:hover {
+  background: var(--accent-hover);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 @media (min-width: 640px) {
-  .page {
-    padding: 0 1.5rem 5rem;
+  .hero {
+    padding-block: 6rem 5rem;
+  }
+
+  .hero::after {
+    right: -4rem;
+    width: 24rem;
+    height: 24rem;
+  }
+
+  .page > section {
+    padding-block: 4rem;
   }
 
   .projects {
     grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+/* 넓은 화면: 제목은 왼쪽 칸, 나머지는 오른쪽 칸 */
+@media (min-width: 900px) {
+  .hero::after {
+    right: 2rem;
+    width: 28rem;
+    height: 28rem;
+  }
+
+  .page > section {
+    display: grid;
+    grid-template-columns: 1fr 2.2fr;
+    column-gap: 3rem;
+  }
+
+  .page > section > h2 {
+    grid-column: 1;
+    grid-row: 1 / span 20;
+    align-self: start;
+    margin: 0;
+  }
+
+  .page > section > :not(h2) {
+    grid-column: 2;
   }
 }
