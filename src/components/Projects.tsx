@@ -12,6 +12,7 @@ export function Projects() {
             <details className="card">
               <summary>{project.name}</summary>
               <div className="card-body">
+                {project.affiliation && <p className="card-meta">{project.affiliation}</p>}
                 <p>{project.description}</p>
                 <ul className="chips small">
                   {project.tags.map((tag) => (

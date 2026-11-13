@@ -165,6 +165,18 @@ ul {
   transform: translateY(-50%);
 }
 
+/* 프로필 사진: 모바일은 이름 위에 작은 원, 넓은 화면은 오른쪽 장식 원 위에 큰 원 */
+.hero-photo {
+  display: block;
+  width: 8rem;
+  height: 8rem;
+  margin-bottom: 1.5rem;
+  border: 4px solid var(--surface);
+  border-radius: 50%;
+  box-shadow: var(--shadow-card);
+  object-fit: cover;
+}
+
 .tagline {
   max-width: 32rem;
   margin: 1rem 0 0;
@@ -172,7 +184,7 @@ ul {
   line-height: 1.75;
 }
 
-/* 색 띠: 소개(크림) → 소개글(흰색) → 기술 스택(짙은 초록) → 프로젝트(크림) → 연락처(짙은 초록, 푸터) */
+/* 색 띠: 소개(크림) → 소개글(흰색) → 경력(크림) → 기술 스택(짙은 초록) → 프로젝트(흰색) → 논문 · 특허(크림) → 연락처(짙은 초록, 푸터) */
 .page > section {
   padding-block: 3rem;
 }
@@ -181,13 +193,18 @@ ul {
   background: var(--band-white);
 }
 
-.page > section:nth-of-type(3) {
+.page > section:nth-of-type(2),
+.page > section:nth-of-type(5) {
   background: var(--band-cream);
 }
 
-/* 짙은 초록 띠: 글자 · 링크 · 태그 색을 이 띠 안에서만 뒤집는다 */
-.page > section:nth-of-type(2),
 .page > section:nth-of-type(4) {
+  background: var(--band-white);
+}
+
+/* 짙은 초록 띠: 글자 · 링크 · 태그 색을 이 띠 안에서만 뒤집는다 */
+.page > section:nth-of-type(3),
+.page > section:nth-of-type(6) {
   --heading: #fff;
   --text-h: #fff;
   --text: rgb(255 255 255 / 0.7);
@@ -202,8 +219,56 @@ ul {
 
 /* 구역: 좁은 화면은 위아래로, 넓은 화면은 제목(왼쪽) · 내용(오른쪽) 두 칸 */
 .page > section > p,
-.page > section > ul {
+.page > section > ul,
+.page > section > ol {
   max-width: 44rem;
+}
+
+/* 경력: 왼쪽 세로선에 점을 찍은 타임라인 */
+.timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline > li {
+  position: relative;
+  padding: 0 0 1.75rem 1.5rem;
+  border-left: 2px solid var(--green-light);
+}
+
+.timeline > li:last-child {
+  padding-bottom: 0;
+}
+
+.timeline > li::before {
+  content: '';
+  position: absolute;
+  top: 0.3rem;
+  left: -0.45rem;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.timeline-period {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.timeline-role {
+  margin: 0 0 0.5rem;
+}
+
+.timeline-points {
+  padding-left: 1.1rem;
+  list-style: disc;
+}
+
+.timeline-points li {
+  margin-bottom: 0.25rem;
 }
 
 /* 기술 스택 · 프로젝트 태그: 알약 */
@@ -300,6 +365,60 @@ ul {
   margin-bottom: 0.5rem;
 }
 
+/* 프로젝트를 한 기관 표시: 설명보다 작고 진한 글씨 */
+.card-body .card-meta {
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* 논문 · 특허 목록: 카드 안에서 한 편씩 구분선으로 나눈다 */
+.pub-list li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.pub-list li:first-child {
+  padding-top: 0;
+}
+
+.pub-list li:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.pub-title {
+  margin: 0 0 0.25rem;
+  color: var(--text-h);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.pub-meta {
+  margin: 0 0 0.4rem;
+  font-size: 0.9rem;
+}
+
+/* 새 창으로 여는 작은 알약 링크 */
+.pub-link {
+  display: inline-block;
+  padding: 0.15rem 0.85rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: transform var(--transition), background var(--transition), color var(--transition);
+}
+
+.pub-link:hover {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.pub-link:active {
+  transform: scale(var(--press-scale));
+}
+
 /* 알약 버튼: 카드의 "자세히 보기" 와 연락처 링크 */
 .card-link a,
 .links a {
@@ -371,6 +490,16 @@ ul {
 
 /* 넓은 화면: 제목은 왼쪽 칸, 나머지는 오른쪽 칸 */
 @media (min-width: 900px) {
+  .hero-photo {
+    position: absolute;
+    top: 50%;
+    right: 8rem;
+    width: 17rem;
+    height: 17rem;
+    margin: 0;
+    transform: translateY(-50%);
+  }
+
   .hero::after {
     right: 2rem;
     width: 28rem;
