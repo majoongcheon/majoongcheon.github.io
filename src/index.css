@@ -123,8 +123,43 @@ ul {
   background: var(--surface);
 }
 
-.card p {
+/* 펼침 카드: 이름 줄 전체가 눌리는 영역이다 */
+.card summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  list-style: none;
+  color: var(--text-h);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.card summary::-webkit-details-marker {
+  display: none;
+}
+
+.card summary::after {
+  content: '+';
+  color: var(--accent);
+  font-size: 1.25rem;
+}
+
+.card[open] summary::after {
+  content: '−';
+}
+
+.card-body {
+  margin-top: 0.5rem;
+}
+
+.card-body p {
   margin-bottom: 0.5rem;
+}
+
+.card-link {
+  margin: 0.5rem 0 0;
 }
 
 .links {
