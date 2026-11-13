@@ -1,0 +1,58 @@
+# GitHub Pages 배포 워크플로
+# - PR 에서는 build 만 실행 (빌드가 깨지는지 확인)
+# - main 에 push 하면 build 후 deploy 까지 실행
+# - 배포 주소: https://majoongcheon.github.io (사용자 사이트라 Vite base 는 기본값 '/' 그대로)
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# 같은 브랜치의 배포가 겹치면 이전 실행을 취소 (배포 중인 것은 끝까지 진행)
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+
+      # PR 에서는 산출물을 올리지 않는다 (배포 대상이 아님)
+      - uses: actions/configure-pages@v5
+        if: github.event_name != 'pull_request'
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
+        with:
+          path: dist
+
+  deploy:
+    # PR 에서는 건너뛰고 main push · 수동 실행에서만 배포
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
