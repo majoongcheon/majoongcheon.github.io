@@ -42,7 +42,17 @@ export interface Patent {
   status: string
 }
 
+/** 프로젝트 구분: 코딩 · MLOps (부트캠프) / 연구 (연구원 · 박사 과정) */
+export type ProjectCategory = 'coding' | 'research'
+
+export interface SkillGroup {
+  /** 묶음 제목 (프로젝트 구분 이름과 맞춘다) */
+  title: string
+  items: string[]
+}
+
 export interface Project {
+  category: ProjectCategory
   name: string
   /** 어느 기관에서 한 일인지. 없으면 생략 */
   affiliation?: string
@@ -59,7 +69,7 @@ export interface Profile {
   tagline: string
   about: string[]
   experience: Experience[]
-  skills: string[]
+  skills: SkillGroup[]
   publications: Publication[]
   patents: Patent[]
   theses: Thesis[]
@@ -71,16 +81,18 @@ export interface Profile {
     /** 테크노트를 쓰는 블로그 */
     blog: string
     email: string
+    /** 이 페이지의 소스 저장소 */
+    source: string
   }
 }
 
 export const profile: Profile = {
   name: '조성기',
   photo: 'profile.jpg',
-  tagline: '직장을 구하기 위해 노력 중인 잡식성 개발자',
+  tagline: '연구 현장에서 개발로 넘어온 잡식성 개발자',
 
   about: [
-    '직장을 구하기 위해 노력 중인 잡식성 개발자입니다. 가리지 않고 배우고 만들어 보는 것을 좋아합니다.',
+    '잡식성 개발자입니다. 가리지 않고 배우고 만들어 보는 것을 좋아합니다.',
     '고려대학교에서 고체물리로 박사 학위를 받았고, 이후 연구 현장에서 장비를 직접 다루며 일해 왔습니다. MOCVD 장비로 GaN 에피 층을 성장시키고 XRD · SEM · AFM · PL 로 분석하면서, 공정 조건이 결과에 주는 영향을 숫자로 비교해 왔습니다.',
     '장비가 멈추면 원인부터 찾고, 기록을 남겨 같은 문제가 반복되지 않게 하는 편입니다. 박사 과정에서는 유기 반도체 결정의 광신호 전달을 연구해 SCI 논문 16편(주저자 3편)과 등록 특허 1건을 남겼습니다.',
     '개발은 지금 유클리드소프트의 ABC 부트캠프(AI캠퍼스 AI파일럿 1기, MLOps 엔지니어 양성과정)에서 처음 배우고 있습니다. 컨테이너로 서비스를 올리고, 배포하고, 문제가 생기면 되돌리는 과정을 팀 프로젝트로 익히는 중입니다.',
@@ -136,21 +148,29 @@ export const profile: Profile = {
     },
   ],
 
+  // 프로젝트 구분(코딩 · MLOps / 연구)과 같은 이름으로 묶는다.
   skills: [
-    'Python',
-    'Node',
-    'Docker · Docker Compose',
-    'Nginx',
-    'Git · GitHub (이슈 · PR)',
-    '컴퓨터활용능력 2급',
-    'MOCVD 운용 · 유지보수',
-    'GaN 에피 성장',
-    'XRD · SEM · AFM',
-    'PL · Raman 분광',
-    '고진공 장비',
-    'Autodesk Inventor (3D 설계)',
-    'Origin (데이터 분석)',
-    '포토리소그래피 · 식각',
+    {
+      title: '코딩 · MLOps',
+      items: ['Python', 'Node', 'MariaDB', 'Docker · Docker Compose', 'Nginx', 'Git · GitHub (이슈 · PR)'],
+    },
+    {
+      title: '연구 · 장비',
+      items: [
+        'MOCVD 운용 · 유지보수',
+        'GaN 에피 성장',
+        'XRD · SEM · AFM',
+        'PL · Raman 분광',
+        '고진공 장비',
+        'Autodesk Inventor (3D 설계)',
+        'Origin (데이터 분석)',
+        '포토리소그래피 · 식각',
+      ],
+    },
+    {
+      title: '자격',
+      items: ['ADsP (데이터분석 준전문가)', '컴퓨터활용능력 2급'],
+    },
   ],
 
   // 논문 · 특허: 「참여논문.pptx」(고려대 연구실 목록)를 바탕으로 정리했다. 최신순.
@@ -199,9 +219,11 @@ export const profile: Profile = {
     },
   ],
 
-  // 연구 성과 위주로 정리했다. 링크가 없는 항목은 url 을 생략한다.
+  // category 로 코딩 · MLOps / 연구를 나눈다. 링크가 없는 항목은 url 을 생략한다.
+  // 이 페이지(my-profile) 자체는 프로젝트가 아니므로 넣지 않고, 소스 링크는 contact.source 에 둔다.
   projects: [
     {
+      category: 'coding',
       name: 'Klassic 재구성: 국악보 변환 · 편집 API 컨테이너 환경',
       affiliation: 'ABC 부트캠프 미니프로젝트4 · 컨테이너 기반 환경 구축 과정 · 2조 · 2026.10–11',
       description:
@@ -210,6 +232,7 @@ export const profile: Profile = {
       tags: ['Docker Compose', 'Nginx', 'MariaDB', 'Tailscale Funnel', '팀장'],
     },
     {
+      category: 'coding',
       name: 'Klassic 1차: 국악보 변환 및 가상악기 연주 서빙 플랫폼',
       affiliation: 'ABC 부트캠프 미니프로젝트3 · DL 모델 서빙 과정 · 3조 「풍악을 울려라」',
       description:
@@ -218,6 +241,7 @@ export const profile: Profile = {
       tags: ['Node.js', 'Python', 'MariaDB', 'FluidSynth', 'pm2', '모델 서빙'],
     },
     {
+      category: 'coding',
       name: '곁, 돌봄의 무게를 읽다: 돌봄부담 7문항 진단',
       affiliation: 'ABC 부트캠프 미니프로젝트2 · ML 모델 구현 과정 · 3팀 · 2026.08–09',
       description:
@@ -225,19 +249,17 @@ export const profile: Profile = {
       url: 'https://github.com/majoongcheon/project2608',
       tags: ['Python', 'scikit-learn', 'LightGBM', 'SHAP', 'Vue', 'Express', 'MariaDB', '팀장'],
     },
+    // 연구 프로젝트는 경력 순서(KAIST → RAON → 박사)로 둔다.
     {
-      name: '유기 반도체 결정의 광신호 전달 연구',
-      description:
-        '고려대학교 박사 과정(2009–2016)의 연구입니다. 유기 반도체 마이크로 결정에서 발광(PL)과 라만 신호가 전달되는 성질을 레이저 공초점 현미경으로 측정했습니다. 연구 내용으로 SCI 논문 16편(주저자 3편)과 「라만신호 측정방법 및 측정장치」 특허 1건(등록)을 남겼습니다.',
-      tags: ['Raman', 'PL', '유기 반도체', '논문 · 특허'],
-    },
-    {
+      category: 'research',
       name: 'GaN 에피 성장 조건과 특성 비교',
+      affiliation: '한국과학기술원(KAIST) 자연과학연구소 · 2024–2025',
       description:
         '같은 구성의 GaN 기반 시료를 공정 조건만 바꿔 성장시키고, 측정 조건을 일정하게 유지한 채 XRD rocking curve(FWHM) · AFM 표면 거칠기 · SEM 으로 비교했습니다. 공정 변수와 결과 사이의 상관관계를 정리해 다음 조건을 정하는 근거로 썼습니다.',
       tags: ['GaN', 'MQW', 'XRD', 'AFM'],
     },
     {
+      category: 'research',
       name: '이온빔 레이저 분광(CLS) 장치 구축',
       affiliation:
         '기초과학연구원(IBS) 중이온가속기연구소(RAON) · 2019–2023 (2019–2021 이용자협회 · 2022–2023 연구소)',
@@ -246,10 +268,12 @@ export const profile: Profile = {
       tags: ['IBS', 'RAON', 'TRIUMF', '공선 레이저 분광', '고진공', '광학 정렬', 'Inventor'],
     },
     {
-      name: 'my-profile',
-      description: '지금 보고 있는 한 페이지짜리 자기소개 페이지. GitHub Pages 로 배포하고 있습니다.',
-      url: 'https://github.com/majoongcheon/majoongcheon.github.io',
-      tags: ['React', 'TypeScript'],
+      category: 'research',
+      name: '유기 반도체 결정의 광신호 전달 연구',
+      affiliation: '고려대학교 대학원 박사 과정 · 2009–2016',
+      description:
+        '고려대학교 박사 과정(2009–2016)의 연구입니다. 유기 반도체 마이크로 결정에서 발광(PL)과 라만 신호가 전달되는 성질을 레이저 공초점 현미경으로 측정했습니다. 연구 내용으로 SCI 논문 16편(주저자 3편)과 「라만신호 측정방법 및 측정장치」 특허 1건(등록)을 남겼습니다.',
+      tags: ['Raman', 'PL', '유기 반도체', '논문 · 특허'],
     },
   ],
 
@@ -258,5 +282,6 @@ export const profile: Profile = {
     blog: 'https://blog.naver.com/jrantert',
     // 이력서에 적은 메일 주소를 사용자가 직접 지정해 공개한다
     email: 'jrantert@naver.com',
+    source: 'https://github.com/majoongcheon/majoongcheon.github.io',
   },
 }
