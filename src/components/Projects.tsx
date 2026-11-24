@@ -22,6 +22,13 @@ function ProjectCard({ project }: { project: Project }) {
               <li key={tag}>{tag}</li>
             ))}
           </ul>
+          {project.serviceUrl && (
+            <p className="card-link">
+              <a href={project.serviceUrl} target="_blank" rel="noreferrer">
+                서비스 열기 →
+              </a>
+            </p>
+          )}
           {project.url && (
             <p className="card-link">
               <a href={project.url} target="_blank" rel="noreferrer">

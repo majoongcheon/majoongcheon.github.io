@@ -57,8 +57,10 @@ export interface Project {
   /** 어느 기관에서 한 일인지. 없으면 생략 */
   affiliation?: string
   description: string
-  /** 프로젝트 링크. 없으면 생략 */
+  /** 프로젝트 링크(소스 저장소). 없으면 생략 */
   url?: string
+  /** 실제로 돌아가는 서비스 주소. 없으면 생략 */
+  serviceUrl?: string
   tags: string[]
 }
 
@@ -106,7 +108,7 @@ export const profile: Profile = {
       period: '2026.07.22 – 현재',
       highlights: [
         '고용노동부 지원(교육비 전액 지원)으로 진행하는 과정',
-        '미니프로젝트: ML 모델 구현(3팀 팀장) · DL 모델 서빙(3조) · 컨테이너 환경 구축(2조 팀장)을 수행하고, 지금은 ML 시스템 클라우드 배포를 배우는 중',
+        '미니프로젝트: ML 모델 구현(3팀 팀장) · DL 모델 서빙(3조) · 컨테이너 환경 구축(2조 팀장) · ML 시스템 클라우드 배포(개인)를 수행',
         '배포 전 이전 이미지 ID 와 되돌리기 태그를 남기고, 백업 · 복원은 임시 환경에서 먼저 시험',
         '장애마다 증상 · 근거 · 영향 · 조치를 네 줄로 기록하고, 배운 내용을 테크노트로 블로그에 정리',
       ],
@@ -222,6 +224,16 @@ export const profile: Profile = {
   // category 로 코딩 · MLOps / 연구를 나눈다. 링크가 없는 항목은 url 을 생략한다.
   // 이 페이지(my-profile) 자체는 프로젝트가 아니므로 넣지 않고, 소스 링크는 contact.source 에 둔다.
   projects: [
+    {
+      category: 'coding',
+      name: '버스야 언제 올꺼니?: 대전 버스 도착시간 보정 API',
+      affiliation: 'ABC 부트캠프 미니프로젝트5 · ML 시스템 클라우드 배포 과정 · 개인 · 2026.11',
+      description:
+        '대전 시내버스 도착 안내(BIS)가 실제와 얼마나 틀릴지 예측해 보정한 도착 시각을 돌려주는 API 입니다. 공공 API 도착정보를 60초마다 모아 실제 도착 시각을 판정하고, 매일 새벽 자동으로 다시 학습해 두 기준선(BIS 그대로 · 평균 지연 보정)보다 오차가 작을 때만 새 모델로 승격합니다. AWS Lightsail 서버와 버킷, GitHub Actions 와 서버의 self-hosted 러너로 배포 · 롤백까지 자동화했고, 고정 시험에서 오차(MAE)가 BIS 보다 19.7%, 배포 뒤 실측에서도 17.3% 작았습니다. 앱이 모델(ONNX)을 받아 휴대폰에서 계산하는 것을 기본으로 하고, AI 도구가 부를 수 있게 MCP 도구로도 내놓았습니다. 개발은 Claude Code 를 팀장으로 두고 하위 에이전트에게 구현을 나눠 맡기는 방식으로 지시했고, 저는 방향 결정 · 서버와 키 준비 · 승인 · 검수를 맡았습니다.',
+      url: 'https://github.com/majoongcheon/D_bus_eta_aws',
+      serviceUrl: 'https://busya.eta.pyhub.kr',
+      tags: ['AWS Lightsail', 'GitHub Actions', 'Docker', 'FastAPI', 'scikit-learn', 'ONNX', 'MCP', '개인'],
+    },
     {
       category: 'coding',
       name: 'Klassic 재구성: 국악보 변환 · 편집 API 컨테이너 환경',
