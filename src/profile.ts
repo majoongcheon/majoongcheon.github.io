@@ -57,8 +57,12 @@ export interface Project {
   /** 어느 기관에서 한 일인지. 없으면 생략 */
   affiliation?: string
   description: string
-  /** 프로젝트 링크. 없으면 생략 */
+  /** 프로젝트 링크(소스 저장소). 없으면 생략 */
   url?: string
+  /** 실제로 돌아가는 서비스 주소. 없으면 생략 */
+  serviceUrl?: string
+  /** 발표 작품 소개 페이지(AXCAMP 갤러리). 없으면 생략 */
+  galleryUrl?: string
   tags: string[]
 }
 
@@ -106,7 +110,7 @@ export const profile: Profile = {
       period: '2026.07.22 – 현재',
       highlights: [
         '고용노동부 지원(교육비 전액 지원)으로 진행하는 과정',
-        '미니프로젝트: ML 모델 구현(3팀 팀장) · DL 모델 서빙(3조) · 컨테이너 환경 구축(2조 팀장)을 수행하고, 지금은 ML 시스템 클라우드 배포를 배우는 중',
+        '미니프로젝트: ML 모델 구현(3팀 팀장) · DL 모델 서빙(3조) · 컨테이너 환경 구축(2조 팀장) · ML 시스템 클라우드 배포(개인)를 수행',
         '배포 전 이전 이미지 ID 와 되돌리기 태그를 남기고, 백업 · 복원은 임시 환경에서 먼저 시험',
         '장애마다 증상 · 근거 · 영향 · 조치를 네 줄로 기록하고, 배운 내용을 테크노트로 블로그에 정리',
       ],
@@ -224,6 +228,16 @@ export const profile: Profile = {
   projects: [
     {
       category: 'coding',
+      name: '버스야 언제 올꺼니?: 대전 버스 도착시간 보정 API',
+      affiliation: 'ABC 부트캠프 미니프로젝트5 · ML 시스템 클라우드 배포 과정 · 개인 · 2026.11',
+      description:
+        '대전 시내버스 도착 안내(BIS)가 실제와 얼마나 틀릴지 예측해 보정한 도착 시각을 돌려주는 API 입니다. 공공 API 도착정보를 60초마다 모아 실제 도착 시각을 판정하고, 매일 새벽 자동으로 다시 학습해 두 기준선(BIS 그대로 · 평균 지연 보정)보다 오차가 작을 때만 새 모델로 승격합니다. AWS Lightsail 서버와 버킷, GitHub Actions 와 서버의 self-hosted 러너로 배포 · 롤백까지 자동화했고, 고정 시험에서 오차(MAE)가 BIS 보다 19.7%, 배포 뒤 실측에서도 17.3% 작았습니다. 앱이 모델(ONNX)을 받아 휴대폰에서 계산하는 것을 기본으로 하고, AI 도구가 부를 수 있게 MCP 도구로도 내놓았습니다. 개발은 Claude Code 를 팀장으로 두고 하위 에이전트에게 구현을 나눠 맡기는 방식으로 지시했고, 저는 방향 결정 · 서버와 키 준비 · 승인 · 검수를 맡았습니다.',
+      url: 'https://github.com/majoongcheon/D_bus_eta_aws',
+      serviceUrl: 'https://busya.eta.pyhub.kr',
+      tags: ['AWS Lightsail', 'GitHub Actions', 'Docker', 'FastAPI', 'scikit-learn', 'ONNX', 'MCP', '개인'],
+    },
+    {
+      category: 'coding',
       name: 'Klassic 재구성: 국악보 변환 · 편집 API 컨테이너 환경',
       affiliation: 'ABC 부트캠프 미니프로젝트4 · 컨테이너 기반 환경 구축 과정 · 2조 · 2026.10–11',
       description:
@@ -236,8 +250,10 @@ export const profile: Profile = {
       name: 'Klassic 1차: 국악보 변환 및 가상악기 연주 서빙 플랫폼',
       affiliation: 'ABC 부트캠프 미니프로젝트3 · DL 모델 서빙 과정 · 3조 「풍악을 울려라」',
       description:
-        '오선보와 정간보 사진 · PDF 를 인식해 악보 데이터로 바꾸고, 편집한 악보를 국악기 소리로 연주해 내려받게 하는 서비스의 1차 판입니다. 웹 화면 · 웹 서비스 · 공유 모듈은 Node.js 로, 모델 API 는 Python(uv)으로 나누고 MariaDB 와 pm2 로 구동했습니다. 실행 조건(운영체제 · 도구 · 인식 엔진과 FluidSynth 설치 절차)은 직접 정리했습니다.',
+        '오선보와 정간보 사진 · PDF 를 인식해 악보 데이터로 바꾸고, 편집한 악보를 국악기 소리로 연주해 내려받게 하는 서비스의 1차 판입니다. 웹 화면 · 웹 서비스 · 공유 모듈은 Node.js 로, 모델 API 는 Python(uv)으로 나누고 MariaDB 와 pm2 로 구동했습니다. 실행 조건(운영체제 · 도구 · 인식 엔진과 FluidSynth 설치 절차)은 직접 정리했습니다. 발표한 코드로 구성한 서비스와 API 가 지금 AXCAMP 에서 운영되고 있습니다(가입 · 로그인 후 이용).',
       url: 'https://github.com/majoongcheon/project2610',
+      serviceUrl: 'https://klassic.axcamp.com',
+      galleryUrl: 'https://axcamp.com/gallery/p/2610-team3-klassic',
       tags: ['Node.js', 'Python', 'MariaDB', 'FluidSynth', 'pm2', '모델 서빙'],
     },
     {
@@ -245,8 +261,10 @@ export const profile: Profile = {
       name: '곁, 돌봄의 무게를 읽다: 돌봄부담 7문항 진단',
       affiliation: 'ABC 부트캠프 미니프로젝트2 · ML 모델 구현 과정 · 3팀 · 2026.08–09',
       description:
-        '발달장애인 보호자의 돌봄부담을 7문항으로 가늠하고, 부담이 크면 가까운 복지서비스 신청 접수처를 지도로 안내하는 서비스입니다. 팀장으로 계획서를 쓰고 설계 · 배포를 이끌었습니다. 2024 실태조사(3,000가구)의 38개 변수에서 후진 제거로 7문항을 골랐고, 시험 602건에서 고부담 여부 재현율 77.3%, 실제 고부담을 부담 없음으로 판정한 경우는 0건이었습니다. 5구간 정확도는 47.8%라는 한계도 문서에 밝혔고, 로그인이나 개인정보 수집은 없습니다. 구현에는 Claude Code 를 활용했습니다.',
+        '발달장애인 보호자의 돌봄부담을 7문항으로 가늠하고, 부담이 크면 가까운 복지서비스 신청 접수처를 지도로 안내하는 서비스입니다. 팀장으로 계획서를 쓰고 설계 · 배포를 이끌었습니다. 2024 실태조사(3,000가구)의 38개 변수에서 후진 제거로 7문항을 골랐고, 시험 602건에서 고부담 여부 재현율 77.3%, 실제 고부담을 부담 없음으로 판정한 경우는 0건이었습니다. 5구간 정확도는 47.8%라는 한계도 문서에 밝혔고, 로그인이나 개인정보 수집은 없습니다. 발표한 코드로 구성한 서비스와 판정 API 가 지금 AXCAMP 에서 운영되고 있습니다. 구현에는 Claude Code 를 활용했습니다.',
       url: 'https://github.com/majoongcheon/project2608',
+      serviceUrl: 'https://care.axcamp.com',
+      galleryUrl: 'https://axcamp.com/gallery/p/2609-team3-care',
       tags: ['Python', 'scikit-learn', 'LightGBM', 'SHAP', 'Vue', 'Express', 'MariaDB', '팀장'],
     },
     // 연구 프로젝트는 경력 순서(KAIST → RAON → 박사)로 둔다.
