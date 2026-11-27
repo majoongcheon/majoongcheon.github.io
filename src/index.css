@@ -214,6 +214,8 @@ ul {
   --tag-bg: rgb(255 255 255 / 0.14);
   --tag-text: #fff;
 
+  /* 변수만 바꾸면 본문 글자는 :root 에서 이미 계산된 어두운 색을 물려받으므로, 이 띠에서 글자색을 다시 지정한다 */
+  color: var(--text);
   background: var(--band-dark);
 }
 

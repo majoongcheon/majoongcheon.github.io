@@ -29,6 +29,13 @@ function ProjectCard({ project }: { project: Project }) {
               </a>
             </p>
           )}
+          {project.galleryUrl && (
+            <p className="card-link">
+              <a href={project.galleryUrl} target="_blank" rel="noreferrer">
+                발표 작품 소개 (AXCAMP 갤러리) →
+              </a>
+            </p>
+          )}
           {project.url && (
             <p className="card-link">
               <a href={project.url} target="_blank" rel="noreferrer">
